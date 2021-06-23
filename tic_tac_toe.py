@@ -4,7 +4,6 @@ import os
 
 # Global declaration
 
-
 # Clear the screen or terminal
 def clear():
     os.system("cls")
@@ -30,9 +29,9 @@ def player_choice( px=0 ):
     return -1
 
 
-# Board map conver to index number
+# Board map convert to index number or return full map
 def board_map(location=0):
-    ''' Convert Board location into index number of board tuple '''
+    ''' Return full Board map or Convert Board location into index number of board tuple '''
 
     if   location == 0: return ([1, 2, 3], [4, 5, 6], [7, 8, 9])
     elif location == 1: i = 0; j = 0
@@ -59,10 +58,9 @@ def update_board(b, l=0, symbol=''):
     return b
 
 
-# Show the board
+# Show the board on the terminal
 def show_board(b):
     ''' To show the board on terminal. '''
-    # To clear the terminal
 
     # To show the board
     row_dt =  '--- --- ---'
@@ -93,8 +91,7 @@ def check_board(b):
         else: res = False
 
         return res
-
-
+    
     if   _win('x'): print("Congratulaton! Player x win the game"); return True
     elif _win('o'): print("Congratulaton! Player o win the game"); return True
     else: print("Continue the game..."); return False
@@ -160,17 +157,11 @@ def main(*args, **kwargs):
         p1_sym = input("Enter player1 symbol (x|o): ")
         p2_sym = 'o' if p1_sym == 'x' else 'x'
 
-        # Show players' symbol and location of choice
-        # show_board(board_map(0))
-        # print(f"Player1 = {p1_sym} and Player2 = {p2_sym}")
-
         # User input for start game
         start_game = input("Star the game (Y|N):").lower()
 
         # Enter Game loop for play and check result
         if start_game == 'y':
-            # Show Initial blank board
-            # show_board(brd)
             game_loop(brd,(p1_sym, p2_sym))
         else: exit_game()
 
@@ -180,6 +171,7 @@ def main(*args, **kwargs):
 
     # Show exit information
     exit_game()
+    return 0
 
 
 # Call the main function
@@ -187,32 +179,10 @@ if __name__ == '__main__':
     main()
 
 
-# Comment section 
+# Comment section for test code
     # print( player_choice(1) )
     # brd = ([' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' '])  ; print("Init:",  brd )
     # update_board(brd, 3, 'x')                         ; print( brd )
-    # update_board(brd, 7, 'O')                         ; print( brd )
     # brd[1][0] = 'X';  show_board(brd)
     # brd[1][0] = 'o'; brd[1][1] = 'o'; brd[1][2] = 'o'; print( brd)
     # check_board(brd)
-
-'''
-    # Count 'x|o' in rows
-    if   b[0].count('x') == 3 and b[1].count('x') == 3 or b[3].count('x') == 3: print("Congratulaton Player 1!")
-    elif b[0].count('o') == 3 and b[1].count('o') == 3 or b[3].count('o') == 3: print("Congratulaton Player 2!")
-    else: pass
-    # Count 'x|o' in colums
-    c1 = [i[0] for i in b]
-    c2 = [i[1] for i in b]
-    c3 = [i[2] for i in b]
-    if   c1.count('x') == 3 or c2.count('x') == 3 or c3.count('x') == 3: print("Congratulaton Player 1!")
-    elif c1.count('o') == 3 or c2.count('o') == 3 or c3.count('o') == 3: print("Congratulaton Player 2!")
-    else: pass
-
-    # Diagonal check 'x|o' 
-    d1 = [b[0][0], b[1][1], b[2][2]]
-    d2 = [b[0][2], b[1][1], b[2][0]]
-    if  d1.count('x') ==3 or d2.count('x') == 3: print("Congratulaton Player 1!")
-    elif  d1.count('o') ==3 or d2.count('o') == 3: print("Congratulaton Player 2!")
-    else: pass
-'''
