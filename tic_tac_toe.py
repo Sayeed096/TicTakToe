@@ -6,7 +6,7 @@ import os
 
 # Clear the screen or terminal
 def clear():
-    os.system("cls")
+    os.system("cls") if os.name == 'nt' else os.system("clear")
 
 
 # Get players input for Board location
@@ -60,7 +60,7 @@ def update_board(b, l=0, symbol=''):
 
 # Show the board on the terminal
 def show_board(b):
-    ''' To show the board on terminal. '''
+    ''' To show the board on screen or terminal. '''
 
     # To show the board
     row_dt =  '--- --- ---'
@@ -72,29 +72,29 @@ def show_board(b):
 
 
 # Check the board status and result
-def check_board(b):
+def check_board(b, symbols=('x', 'o')):
     ''' Check the board status and return result. '''
 
     # Column
-    c1 = [i[0] for i in b]
-    c2 = [i[1] for i in b]
-    c3 = [i[2] for i in b]
+    c1 = [ i[0] for i in b ]
+    c2 = [ i[1] for i in b ]
+    c3 = [ i[2] for i in b ]
     # Diagonal
-    d1 = [b[0][0], b[1][1], b[2][2]]
-    d2 = [b[0][2], b[1][1], b[2][0]]
+    d1 = [ b[0][0], b[1][1], b[2][2] ]
+    d2 = [ b[0][2], b[1][1], b[2][0] ]
 
     def _win(px=''):
-        # Check in row by count {px}
-        if   b[0].count(px) == 3 or b[1].count(px) == 3 or b[2].count(px) == 3: res = True
-        elif c1.count(px) == 3 or c2.count(px) == 3 or c3.count(px) == 3: res = True
-        elif d1.count(px) ==3 or d2.count(px) == 3: res = True
+        # Check in row, columb and diagonal by counting {px}
+        if  b[0].count(px) == 3 or b[1].count(px) == 3 or b[2].count(px) == 3 or \
+            c1.count(px) == 3   or c2.count(px) == 3   or c3.count(px) == 3 or \
+            d1.count(px) ==3    or d2.count(px) == 3:  res = True
         else: res = False
 
         return res
     
-    if   _win('x'): print("Congratulaton! Player x win the game"); return True
-    elif _win('o'): print("Congratulaton! Player o win the game"); return True
-    else: print("Continue the game..."); return False
+    if   _win(symbols[0]): return True
+    elif _win(symbols[1]): return True
+    else: return False
 
 
 # Exit from the game
@@ -116,24 +116,18 @@ def game_loop(board, symbols=('x', 'O')):
         print (f"Player 1 = {syms[0]}, Player 2 = {syms[1]}"); print()
         show_board(b)
 
-    def _play(player=0, board=board):
-
-        # Ask Player1's choice of Board
-        p_iloc = player_choice(player)
-
-        # Update Board and clear screen and then show updated Board
-        board = update_board(board, p_iloc, symbols[player])
-
     while(turn < 10):
-        
+        pl_x = turn%2
         _show(board, symbols)
         
         # Get player input and update board
-        _play(turn%2, board)
-        _show(board, symbols)
+        p_iloc = player_choice(pl_x)
+        board = update_board(board, p_iloc, symbols[pl_x])
 
         # Check Board status and show result or next play
-        if check_board(board):
+        if check_board(board, symbols):
+            _show(board, symbols)
+            print(f"Winner is Player {pl_x+1}. Congratulation!!!")
             break
         else: turn += 1
 
@@ -151,14 +145,14 @@ def main(*args, **kwargs):
         """ Start and restart game loop. """
         # Initialize the board and clear screen
         brd = ([' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' '])  #; print("Init:",  brd )
-        clear()
 
         # User input for set Player1 symbol "x|O"
         p1_sym = input("Enter player1 symbol (x|o): ")
         p2_sym = 'o' if p1_sym == 'x' else 'x'
 
         # User input for start game
-        start_game = input("Star the game (Y|N):").lower()
+        start_game = input("Star the game (y|n):").lower()
+        clear()
 
         # Enter Game loop for play and check result
         if start_game == 'y':
@@ -183,6 +177,6 @@ if __name__ == '__main__':
     # print( player_choice(1) )
     # brd = ([' ', ' ', ' '], [' ', ' ', ' '], [' ', ' ', ' '])  ; print("Init:",  brd )
     # update_board(brd, 3, 'x')                         ; print( brd )
-    # brd[1][0] = 'X';  show_board(brd)
+    # brd[1][0] = 'x';  show_board(brd)
     # brd[1][0] = 'o'; brd[1][1] = 'o'; brd[1][2] = 'o'; print( brd)
     # check_board(brd)
